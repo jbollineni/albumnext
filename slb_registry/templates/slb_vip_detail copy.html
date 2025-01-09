@@ -1,0 +1,157 @@
+<!-- templates/slb_vip_detail.html -->
+
+{% extends "base.html" %}
+{% block page_content %}
+    <!-- <h3>SLB VIP Detail</h3>     -->
+
+<div class="accordion" id="accordionExample1">
+    <div class="accordion-item">
+    <h2 class="accordion-header" id="headingOne1">
+        <button 
+        class="accordion-button" 
+        type="button" 
+        data-bs-toggle="collapse" 
+        data-bs-target="#collapseOne1" 
+        aria-expanded="true" 
+        aria-controls="collapseOne1"
+        >
+            SLB VIP Detail
+        </button>
+    </h2>
+        <div id="collapseOne1" class="accordion-collapse collapse show" aria-labelledby="headingOne1" data-bs-parent="#accordionExample1">
+            <div class="accordion-body">    
+                <div class="row">
+
+                    <div class = "col-3">
+                    <h6>Frontend Info</h6>
+                        <table class="table">
+                            <tr>
+                                <td>Handle</td>
+                                <td>{{ vip_info.frontend_handle }}</td>
+                            </tr>
+                            <tr>
+                                <td>Address</td>
+                                <td>{{ vip_info.listener_address }}</td>
+                            </tr>
+                            <tr>
+                                <td>Protocol / Port</td>
+                                <td>{{ vip_info.protocol }} / {{ vip_info.port }}</td>
+                            </tr>
+                            <tr>
+                                <td>Address Type</td>
+                                <td>{{ vip_info.address_type }}</td>
+                            </tr>
+                            <tr>
+                                <td>Connection Type</td>
+                                <td>{{ vip_info.connection_type }}</td>
+                            </tr>
+                            <tr>
+                                <td>Admin State</td>
+                                <td>{{ vip_info.admin_state }}</td>
+                            </tr>
+                        </table>
+ 
+                        <h6>Healthcheck Info</h6>
+                        <table class="table">
+                            <tr>
+                                <td>Healthcheck Type</td>
+                                <td>{{ healthcheck_info.healthcheck_type }}</td>
+                            </tr>
+                            <tr>
+                                <td>Healthcheck Port</td>
+                                <td>{{ healthcheck_info.healthcheck_port }}</td>
+                            </tr>
+                            <tr>
+                                <td>URI</td>
+                                <td>{{ healthcheck_info.send_string }}</td>
+                            </tr>
+                            <tr>
+                                <td>Expected Response</td>
+                                <td>{{ healthcheck_info.receive_string }}</td>
+                            </tr>
+                            <tr></tr>
+                                <td>HTTP Host Header</td>
+                                <td>{{ healthcheck_info.http_host_header }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                
+                    <div class = "col-5">
+                    <h6>Backend Info</h6>
+                        <table class="table">
+                            <tr>
+                                <td>Handle</td>
+                                <td>{{ pool_info.backend_handle }}</td>
+                            </tr>
+                            <tr></tr>
+                                <td>LB Method</td>
+                                <td>{{ pool_info.load_balancing_mode }}</td>
+                            </tr>
+                            <tr>
+                                <td>Members</td>
+                                <td>{{ pool_info.healthcheck_handle_id }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                
+                    <div class = "col-4">
+                    <h6>Event Stream</h6>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>   
+
+
+
+<br>
+<div class="row">
+    <div class = "col-12">
+        <div class="accordion" id="accordionExample">
+            <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Admin Info
+                </button>
+            </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                    <div class="accordion-body"> 
+        
+                        <table id="admin-info">
+                            <tr>
+                                <td>Devhub Slug</td>
+                                <td>{{ vip_info.app_inventory_slug }}</td>
+                            </tr>
+                            <tr>
+                                <td>Team Distro</td>
+                                <td>{{ vip_info.team_distro }}</td>
+                            </tr>
+                            <tr>
+                                <td>Datacenter</td>
+                                <td>{{ vip_info.datacenter }}</td>
+                            </tr>
+                            <tr>
+                                <td>SLB Name</td>
+                                <td>{{ vip_info.device_fqdn_id }}</td>
+                            </tr>
+                            <tr>
+                                <td>LB Platform</td>
+                                <td>{{ device_info.device_platform_vendor }}</td>
+                            </tr>
+                            <tr>
+                                <td>Security Zone</td>
+                                <td>{{ vip_info.security_zone }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock page_content %}

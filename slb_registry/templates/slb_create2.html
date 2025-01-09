@@ -1,0 +1,112 @@
+<!-- templates/slb_vip_create.html -->
+
+{% extends "base.html" %}
+{% block page_content %}
+
+{% load crispy_forms_tags %}
+
+<style>
+    /* Custom CSS for compact form */
+    body {
+        font-size: 11px;
+    }
+    .form-control, .form-select {
+        font-size: 11px;
+        padding: 0.25rem 0.5rem;
+        height: auto;
+    }
+    .form-check-input {
+        width: 1em;
+        height: 1em;
+        margin-top: 0.25em;
+    }
+    .btn {
+        font-size: 14px;
+        padding: 0.25rem 0.5rem;
+    }
+    .table th, .table td {
+        padding: 0.5rem;
+    }
+    .accordion-button {
+        padding: 0.5rem 1rem;
+        font-size: 12px;
+    }
+    .accordion-body {
+        padding: 0.5rem;
+    }
+    .alert {
+        font-size: 11px;
+        padding: 0.5rem;
+    }
+</style>
+
+
+
+<form id="slb-create" method="post" action="/slb/create" >
+    {% csrf_token %}
+    {% crispy form %}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const addRowBtn = document.getElementById('add-row');
+            const backendTable = document.getElementById('backend-table').getElementsByTagName('tbody')[0];
+            const frontendDatacenter = document.querySelector('.frontend-datacenter');
+            const frontendPort = document.querySelector('.frontend-port');
+            console.log(frontendPort)
+            
+            function getDatacenterOptions() {
+            return Array.from(frontendDatacenter.options).map(option => {
+                return `<option value="${option.value}" ${option.selected ? 'selected' : ''}>${option.text}</option>`;
+            }).join('');
+        }
+        
+        function addNewRow() {
+            const newRow = backendTable.insertRow();
+            newRow.innerHTML = `
+                <td><input type="text" class="form-control" name="ip_address[]"></td>
+                <td><input type="text" class="form-control" name="port[]" value="${frontendPort.value}"></td>
+                <td>
+                    <select class="form-control" name="datacenter[]">
+                        ${getDatacenterOptions()}
+                    </select>
+                </td>
+                <td><input type="text" class="form-control" name="fqdn[]" disabled></td>
+                <td>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" name="admin_state[]" checked>
+                    </div>
+                </td>
+                <td><button type="button" class="btn btn-danger btn-sm delete-row">X</button></td>
+            `;
+        }
+
+
+        addRowBtn.addEventListener('click', addNewRow);
+        
+        backendTable.addEventListener('click', function(e) {
+            if (e.target.classList.contains('delete-row')) {
+                e.target.closest('tr').remove();
+            }
+        });
+
+        frontendDatacenter.addEventListener('change', function() {
+        const backendDatacenters = backendTable.querySelectorAll('select[name="datacenter[]"]');
+        backendDatacenters.forEach(select => {
+            select.innerHTML = getDatacenterOptions();
+            });
+        });
+
+        frontendPort.addEventListener('change', function() {
+        const backendPorts = backendTable.querySelectorAll('input[name="port[]"]');
+        backendPorts.forEach(input => {
+            input.value = frontendPort.value;
+        });
+        });
+
+        // Add initial row
+        addNewRow();
+
+    });
+    </script>
+
+{% endblock page_content %}
