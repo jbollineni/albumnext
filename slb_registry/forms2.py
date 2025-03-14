@@ -15,13 +15,13 @@ class SlbCreateForm(forms.Form):
         choices=[
             ("convoy", "Convoy"),
             ("einstein", "Einstein"),
-            ("bbdevops", "Backbone DevOps"),
+            ("teamdevops", "Team-DevOps"),
         ],
         help_text="Select your Devhub application name",
     )
     TEAM_DISTRO_LIST = forms.EmailField(
         label="Team Distribution List",
-        initial="Ex. team@comcast.net",
+        initial="Ex. team@example.net",
         help_text="Must be a team distribution list and not a personal email",
     )
 
