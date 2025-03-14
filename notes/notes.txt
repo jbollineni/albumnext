@@ -3,7 +3,7 @@ from slb_registry.models import FrontendInfo, BackendInfo, BackendMembers, Healt
 
 FrontendInfo.objects.all()
 
-device1 = DeviceInfo(device_fqdn="slbv301a-d.ashburn.va.ndcasbn.comcast.net", device_datacenter="ashburn", device_platform_vendor="f5", device_security_zone="green", cluster_primary_unit="slbv301a-d.ashburn.va.ndcasbn.comcast.net", object_db_status="active")
+device1 = DeviceInfo(device_fqdn="bigip01a-d.example.net", device_datacenter="ashburn", device_platform_vendor="f5", device_security_zone="green", cluster_primary_unit="bigip01a-d.example.net", object_db_status="active")
 device1.save()
 
 
@@ -47,13 +47,13 @@ vip11 = FrontendInfo(handle="vs_myfirsttest-as-4t_443", address="192.168.1.14", 
 #####################################
 
 
-device1 = DeviceInfo(device_fqdn="slbv301a-d.ashburn.va.ndcasbn.comcast.net", device_datacenter="ashburn", device_platform_vendor="f5", device_security_zone="green", cluster_primary_unit="slbv301a-d.ashburn.va.ndcasbn.comcast.net", object_db_status="active")
+device1 = DeviceInfo(device_fqdn="bigip01a-d.example.net", device_datacenter="ashburn", device_platform_vendor="f5", device_security_zone="green", cluster_primary_unit="bigip01a-d.example.net", object_db_status="active")
 device1.save()
 
-device2 = DeviceInfo(device_fqdn="slbv301a-d.northlake.il.ndcchgo.comcast.net", device_datacenter="chicago", device_platform_vendor="f5", device_security_zone="green", cluster_primary_unit="slbv301a-d.northlake.il.ndcchgo.comcast.net", object_db_status="active")
+device2 = DeviceInfo(device_fqdn="bigip01a-d.northlake.il.ndcchgo.comcast.net", device_datacenter="chicago", device_platform_vendor="f5", device_security_zone="green", cluster_primary_unit="bigip01a-d.northlake.il.ndcchgo.comcast.net", object_db_status="active")
 device2.save()
 
-device3 = DeviceInfo(device_fqdn="slbv301a-d.hillsboro.or.ndchlsbr.comcast.net", device_datacenter="hillsboro", device_platform_vendor="f5", device_security_zone="green", cluster_primary_unit="slbv301a-d.hillsboro.or.ndchlsbr.comcast.net", object_db_status="active")
+device3 = DeviceInfo(device_fqdn="bigip01a-d.hillsboro.or.ndchlsbr.comcast.net", device_datacenter="hillsboro", device_platform_vendor="f5", device_security_zone="green", cluster_primary_unit="bigip01a-d.hillsboro.or.ndchlsbr.comcast.net", object_db_status="active")
 device3.save()
 
 for i in range(1, 11):
@@ -235,5 +235,4 @@ pool=BackendInfo(name="p_test-as-1t_443", load_balancing_mode="round-robin", hea
     </div>
 </body>
 </html>
-
 

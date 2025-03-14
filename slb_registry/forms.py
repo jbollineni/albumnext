@@ -16,14 +16,14 @@ class SlbCreateForm(forms.Form):
         choices=[
             ("convoy", "Convoy"),
             ("einstein", "Einstein"),
-            ("bbdevops", "Backbone-DevOps"),
+            ("team-devops", "Team-DevOps"),
         ],
         help_text="Select the coresponding Devhub application name",
     )
     TEAM_DISTRO_LIST = forms.EmailField(
         required=True,
         label="Team Distribution List",
-        initial="team@comcast.net",
+        initial="team@example.net",
         widget=forms.EmailInput(attrs={'class': 'textinput form-control'}),
         help_text="Must be a team distribution list and not a personal email",
     )
@@ -77,7 +77,7 @@ class SlbCreateForm(forms.Form):
             ("sql", "SQL Load Balancer"),
         ],
         widget=forms.Select(attrs={'class': 'form-select'}),
-        help_text="See wiki https://etwiki.sys.comcast.net/display/NELB/Load+Balancing+Engineering for help",
+        help_text="See wiki for help",
         
     )
     VIP_ADDRESS_TYPE = forms.ChoiceField(
