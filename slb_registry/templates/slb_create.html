@@ -1,0 +1,579 @@
+<!-- templates/slb_vip_create.html -->
+
+{% extends "base.html" %}
+{% block page_content %}
+
+<style>
+    /* Custom CSS for compact form */
+    body {
+        font-size: 11px;
+    }
+    .form-control, .form-select {
+        font-size: 11px;
+        padding: 0.25rem 0.5rem;
+        height: auto;
+    }
+    .form-check-input {
+        width: 1em;
+        height: 1em;
+        margin-top: 0.25em;
+    }
+    .btn {
+        font-size: 14px;
+        padding: 0.25rem 0.5rem;
+    }
+    .table th, .table td {
+        padding: 0.5rem;
+    }
+    .accordion-button {
+        padding: 0.5rem 1rem;
+        font-size: 12px;
+    }
+    .accordion-body {
+        padding: 0.5rem;
+    }
+    .alert {
+        font-size: 11px;
+        padding: 0.5rem;
+    }
+</style>
+
+
+
+<form id="slb-create" method="post" action="/slb/create" >
+    {% csrf_token %}
+
+    <h5>SLB VIP Creation</h5>
+    <div class="alert alert-warning" role="alert">
+        <strong>Note:</strong>
+            Use this form to create an SLB VIP to loadbalance traffic to your backends (application servers) within a site.
+    </div> 
+    <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+    
+    <div class="row">
+    <div class="col-md-4">
+        <div class="accordion" id="accordionLeft">
+
+            <!-- Admin Info Accordion -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingAdminInfo">
+                    <button class="accordion-button" type="button" data-bs-toggle="toggle" data-bs-target="#admin-information" aria-expanded="true" aria-controls="admin-information">
+                        Admin Information
+                    </button>
+                </h2>
+                <div id="admin-information" class="accordion-collapse collapse show" aria-labelledby="headingAdminInfo">
+                    <div class="accordion-body">
+
+                        <div id="div_id_APP_INVENTORY_SLUG" class="mb-3 row form-group">
+                            <label for="{{ form.APP_INVENTORY_SLUG.id_for_label }}" class="col-form-label pt-0 col-lg-4 requiredField">
+                                {{ form.APP_INVENTORY_SLUG.label }}
+                                <span class="asteriskField">*</span>
+                            </label>
+                            <div class="col-lg-8">
+                                <select name="{{ form.APP_INVENTORY_SLUG.name }}" class="select form-select" aria-describedby="id_APP_INVENTORY_SLUG_helptext" id="{{ form.APP_INVENTORY_SLUG.id_for_label }}">
+                                    {% for value, label in form.APP_INVENTORY_SLUG.field.choices %}
+                                        <option value="{{ value }}" {% if form.APP_INVENTORY_SLUG.value == value %}selected{% endif %}>
+                                            {{ label }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                                <small id="id_{{ form.APP_INVENTORY_SLUG.name }}_helptext" class="form-text text-muted">
+                                    {{ form.APP_INVENTORY_SLUG.help_text }}
+                                </small>
+                            </div>
+                        </div>
+                        
+                        <div id="div_id_TEAM_DISTRO_LIST" class="mb-3 row form-group">
+                            <label for="{{ form.TEAM_DISTRO_LIST.id_for_label }}" class="col-form-label pt-0 col-lg-4 requiredField">
+                                {{ form.TEAM_DISTRO_LIST.label }}
+                                <span class="asteriskField">*</span> 
+                            </label> 
+                            <div class="col-lg-8">
+                                {{ form.TEAM_DISTRO_LIST }}
+                                <small id="id_{{ form.TEAM_DISTRO_LIST.name }}_helptext" class="form-text text-muted">
+                                    {{ form.TEAM_DISTRO_LIST.help_text }}
+                                </small>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingFrontendInfo">
+                    <button class="accordion-button" type="button" data-bs-toggle="toggle" data-bs-target="#lb-frontend-config" aria-expanded="true" aria-controls="lb-frontend-config">
+                        LB Frontend Config
+                    </button>
+                </h2>
+                <div id="lb-frontend-config" class="accordion-collapse collapse show" aria-labelledby="headingFrontendInfo" >
+                    <div class="accordion-body"> 
+                        <div class="alert alert-info" role="alert">
+                            <strong>Note:</strong>
+                            Use the same application handle of an existing VIP if you intend to open a new port.
+                        </div>
+
+                        <div>
+                            <div id="div_id_APPLICATION_HANDLE" class="mb-3 row">
+                                <label for="{{ form.APPLICATION_HANDLE.id_for_label }}" class="col-form-label pt-0 col-lg-4 requiredField">
+                                    {{ form.APPLICATION_HANDLE.label }}
+                                    <span class="asteriskField">*</span>
+                                </label>
+                                <div class="col-lg-8">
+                                    {{ form.APPLICATION_HANDLE }}
+                                    <small id="id_{{ form.APPLICATION_HANDLE.name }}_helptext" class="form-text text-muted">
+                                        {{ form.APPLICATION_HANDLE.help_text }}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div> 
+                            <div id="div_id_SECURITY_ZONE" class="mb-3 row"> 
+                                <label for="{{ form.SECURITY_ZONE.id_for_label }}" class="col-form-label pt-0 col-lg-4 requiredField">
+                                    Security Zone
+                                    <span class="asteriskField">*</span> 
+                                </label> 
+                                <div class="col-lg-8">
+                                    {{ form.SECURITY_ZONE }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div id="div_id_DATACENTER" class="mb-3 row">
+                                <label for="{{ form.DATACENTER.id_for_label }}" class="col-form-label pt-0 col-lg-4 requiredField">
+                                    Site<span class="asteriskField">*</span>
+                                </label>
+                                <div class="col-lg-8"> 
+                                    {{ form.DATACENTER }}
+                                    <small id="id_{{ form.DATACENTER.name }}_helptext" class="form-text text-muted">
+                                        {{ form.DATACENTER.help_text }}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div id="div_id_LOADBALANCER_TYPE" class="mb-3 row">
+                                <label for="{{ form.LOADBALANCER_TYPE.id_for_label }}" class="col-form-label pt-0 col-lg-4 requiredField">
+                                    Load Balancer Type<span class="asteriskField">*</span>
+                                </label> 
+                                <div class="col-lg-8">
+                                    {{ form.LOADBALANCER_TYPE }}
+                                    <small id="id_{{ form.LOADBALANCER_TYPE.name }}_helptext" class="form-text text-muted">
+                                        {{ form.LOADBALANCER_TYPE.help_text }}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div id="div_id_VIP_ADDRESS_TYPE" class="mb-3 row"> 
+                                    <label for="{{ form.VIP_ADDRESS_TYPE.id_for_label }}" class="col-lg-4 col-form-label pt-0 requiredField">
+                                        VIP Address Type<span class="asteriskField">*</span>
+                                    </label> 
+                                    <div class="col-lg-8">
+                                        <!-- <div class="form-check form-check-inline"> 
+                                            <input type="radio" class="form-check-input" name="VIP_ADDRESS_TYPE" value="ipv4" id="id_VIP_ADDRESS_TYPE_0" required="">
+                                            <label for="id_VIP_ADDRESS_TYPE_0" class="form-check-label">
+                                            IPv4
+                                            </label>
+                                        </div>
+                                        
+                                        <div class="form-check form-check-inline"> 
+                                            <input type="radio" class="form-check-input" name="VIP_ADDRESS_TYPE" value="ipv6" id="id_VIP_ADDRESS_TYPE_1" required="">
+                                            <label for="id_VIP_ADDRESS_TYPE_1" class="form-check-label">
+                                            IPv6
+                                            </label>
+                                        </div> -->
+                                        {{ form.VIP_ADDRESS_TYPE }}
+                                    </div>
+                                
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="mb-3 row">
+                                <label for="id_VIP_ADDRESS" class="col-form-label col-lg-4 requiredField">
+                                    VIP Address<span class="asteriskField">*</span>
+                                </label>
+                                <div class="col-lg-8">
+                                    <div class="input-group"> <input type="text" name="VIP_ADDRESS" class="textinput form-control" required="" disabled="" aria-describedby="id_VIP_ADDRESS_helptext" id="id_VIP_ADDRESS">
+                                        <button class="btn btn-info" type="button">Retrieve</button>
+                                    </div>
+                                    
+                                    <small id="id_{{ form.VIP_ADDRESS.name }}_helptext" class="form-text text-muted">
+                                        {{ form.VIP_ADDRESS.help_text }}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div id="div_id_VIP_PORT" class="mb-3 row">
+                                <label for="{{ form.VIP_PORT.id_for_label }}" class="col-form-label pt-0 col-lg-4 requiredField">
+                                    VIP Port
+                                    <span class="asteriskField">*</span>
+                                </label> 
+                                <div class="col-lg-8"> 
+                                    {{ form.VIP_PORT }}
+                                    <small id="id_{{ form.VIP_PORT.name }}_helptext" class="form-text text-muted">
+                                        {{ form.VIP_PORT.help_text }}
+                                    </small>
+                                </div> 
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+                        
+    
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingAdvancedConfig">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="toggle" data-bs-target="#advanced-settings" aria-expanded="true" aria-controls="advanced-settings">
+                        Advanced Settings
+                    </button>
+                </h2>
+                <div id="advanced-settings" class="accordion-collapse collapse show" aria-labelledby="headingAdvancedConfig" >
+                    <div class="accordion-body">
+                        <div>
+                            <div id="div_id_LOAD_BALANCING_METHODS" class="mb-3 row">
+                                <label for="id_LOAD_BALANCING_METHODS" class="col-form-label pt-0 col-lg-4 requiredField">
+                                    Load Balancing Method
+                                    <span class="asteriskField">*</span>
+                                </label>
+                                <div class="col-lg-8">
+                                    <select name="LOAD_BALANCING_METHODS" class="select form-select" id="id_LOAD_BALANCING_METHODS">
+                                        <option value="roundrobin">Round Robin</option>
+                                        <option value="leastconnections">Least Connections</option>
+    
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div id="div_id_HEALTH_CHECK_HTTP_URI" class="mb-3 row">
+                                <label for="id_HEALTH_CHECK_HTTP_URI" class="col-form-label pt-0 col-lg-4 requiredField">
+                                        HTTP Health Check URI<span class="asteriskField">*</span> 
+                                </label> 
+                                <div class="col-lg-8"> <input type="text" name="HEALTH_CHECK_HTTP_URI" value="/health" class="textinput form-control" required="" aria-describedby="id_HEALTH_CHECK_HTTP_URI_helptext" id="id_HEALTH_CHECK_HTTP_URI" spellcheck="false" data-ms-editor="true"> 
+                                <div id="id_HEALTH_CHECK_HTTP_URI_helptext" class="form-text">Enter a URI path to check</div> 
+                                </div> 
+                            </div> 
+                        </div>
+
+                        <div>
+                            <div id="div_id_HEALTH_CHECK_HTTP_EXPECTED_RESPONSE" class="mb-3 row"> 
+                                <label for="id_HEALTH_CHECK_HTTP_EXPECTED_RESPONSE" class="col-form-label pt-0 col-lg-4 requiredField">
+                                        HTTP Expected Response<span class="asteriskField">*</span> 
+                                </label>
+                                <div class="col-lg-8"> <input type="text" name="HEALTH_CHECK_HTTP_EXPECTED_RESPONSE" value="200 OK" class="textinput form-control" required="" aria-describedby="id_HEALTH_CHECK_HTTP_EXPECTED_RESPONSE_helptext" id="id_HEALTH_CHECK_HTTP_EXPECTED_RESPONSE" spellcheck="false" data-ms-editor="true">
+                                    <div id="id_HEALTH_CHECK_HTTP_EXPECTED_RESPONSE_helptext" class="form-text">Enter the expected response content for health check</div> 
+                                </div> 
+                            </div> 
+                        </div>
+
+                        <div> 
+                            <div id="div_id_HEALTH_CHECK_HTTP_HOST_HEADER" class="mb-3 row"> 
+                                <label for="id_HEALTH_CHECK_HTTP_HOST_HEADER" class="col-form-label pt-0 col-lg-4 requiredField">
+                                        HTTP Host Header<span class="asteriskField">*</span> 
+                                </label> <div class="col-lg-8"> <input type="text" name="HEALTH_CHECK_HTTP_HOST_HEADER" value="www.example.com" class="textinput form-control" required="" aria-describedby="id_HEALTH_CHECK_HTTP_HOST_HEADER_helptext" id="id_HEALTH_CHECK_HTTP_HOST_HEADER" spellcheck="false" data-ms-editor="true"> 
+                                    <div id="id_HEALTH_CHECK_HTTP_HOST_HEADER_helptext" class="form-text">Enter a host header</div> 
+                                </div> 
+                            </div> 
+                        </div>
+
+                        <div> 
+                            <div id="div_id_HEALTH_CHECK_PORT" class="mb-3 row"> 
+                                <label for="id_HEALTH_CHECK_PORT" class="col-form-label pt-0 col-lg-4 requiredField">
+                                        Health Check Port<span class="asteriskField">*</span> 
+                                </label> <div class="col-lg-8"> <input type="number" name="HEALTH_CHECK_PORT" value="443" min="1" max="65535" class="numberinput form-control" required="" aria-describedby="id_HEALTH_CHECK_PORT_helptext" id="id_HEALTH_CHECK_PORT"> 
+                                    <div id="id_HEALTH_CHECK_PORT_helptext" class="form-text">Enter a port number if different from Backend Port </div> 
+                                </div> 
+                            </div> 
+                        </div> 
+                    </div> 
+                </div> 
+            </div>     
+        </div>
+    </div> 
+    
+
+
+
+
+
+    <div class="col-md-8" >
+        <div class="accordion" id="accordionRight"> 
+            <div class="accordion-item"> 
+                <h2 class="accordion-header"> 
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#backend-information" aria-expanded="true" aria-controls="backend-information">
+                Backend Information
+                </button> 
+                </h2> 
+                
+                <div id="backend-information" class="accordion-collapse collapse show" aria-labelledby="backend-information" data-bs-parent="#accordionRight">    
+                    <div class="accordion-body">
+                        {{ backend_formset.management_form }}
+                        <table class="table" id="backendTable">
+                            <thead>
+                                <tr>
+                                    <th>IP Address</th>
+                                    <th>Port</th>
+                                    <th>Site</th>
+                                    <th>FQDN</th>
+                                    <th>Admin State</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for backend_form in backend_formset %}
+                                    <tr class="backend-row">
+                                        <td>
+                                            {{ backend_form.ip_address }}
+                                            {{ backend_form.ip_address.errors }}
+                                        </td>
+                                        <td>
+                                            {{ backend_form.port }}
+                                            {{ backend_form.port.errors }}
+                                        </td>
+                                        <td>
+                                            {{ backend_form.site }}
+                                            {{ backend_form.site.errors }}
+                                        </td>
+                                        <td>
+                                            {{ backend_form.fqdn }}
+                                            {{ backend_form.fqdn.errors }}
+                                        </td>
+                                        <td>
+                                            {{ backend_form.admin_state }}
+                                            {{ backend_form.admin_state.errors }}
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger btn-sm remove-row">Remove</button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <button type="button" class="btn btn-primary" id="addBackendRow">Add Backend</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <br>
+        <br>
+        <div class="buttonHolder">
+            <input type="submit" name="submit" value="Save to DB" class="btn btn-primary btn-info" id="submit-id-submit">
+            <input type="submit" name="commit" value="Commit to Loadbalancer" class="btn btn-primary btn-warning" id="submit-id-commit">
+        </div>
+    </div>
+
+    </div>
+    
+    <!-- End of info row -->
+
+
+    <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+    
+    <!-- Begin of Event Stream and Traffic Flow row -->
+    <div class="row "> 
+        <div class="col-md-5"> 
+            <div class="accordion" id="accordion-4434"> 
+                <div class="accordion-item"> 
+                    <h2 class="accordion-header"> 
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#event-stream" aria-expanded="true" aria-controls="event-stream">
+                        Event Stream
+                        </button>
+                    </h2> 
+                    <div id="event-stream" class="accordion-collapse collapse show" aria-labelledby="event-stream" data-bs-parent="#accordion-4434"> 
+                        <div class="accordion-body"> 
+                            <h6> Event Stream 
+
+                            </h6> 
+                        </div> 
+                    </div> 
+                </div>
+            </div>
+        </div> 
+        <div class="col-md-7"> 
+            <div class="accordion" id="accordion-2300"> 
+                <div class="accordion-item"> 
+                    <h2 class="accordion-header"> 
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#traffic-flow" aria-expanded="true" aria-controls="traffic-flow">
+                    Traffic flow
+                        </button> 
+                    </h2> 
+                    <div id="traffic-flow" class="accordion-collapse collapse show" aria-labelledby="traffic-flow" data-bs-parent="#accordion-2300"> 
+                        <div class="accordion-body"> 
+                            <h6> Network Diagram </h6> 
+                        </div> 
+                    </div> 
+                </div>
+            </div>
+        </div> 
+    </div> 
+    <!-- End of Event Stream and Traffic Flow row -->
+
+    <br>
+    <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+    <br>
+    
+    
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    
+        <script>
+    
+            document.addEventListener('DOMContentLoaded', function() {
+                const addRowBtn = document.getElementById('add-row');
+                const backendTable = document.getElementById('backendTable');
+                const addBackendBtn = document.getElementById('addBackendRow');
+                let formCount = document.getElementById('id_form-TOTAL_FORMS');
+                const frontendDatacenter = document.querySelector('#id_DATACENTER');
+                const frontendPort = document.querySelector('#id_VIP_PORT');
+                
+                function getDatacenterOptions() {
+                    return Array.from(frontendDatacenter.options).map(option => {
+                        return `<option value="${option.value}" ${option.selected ? 'selected' : ''}>${option.text}</option>`;
+                    }).join('');
+                }
+            
+                // function addNewRow() {
+                //     const newRow = backendTable.insertRow();
+                //     newRow.innerHTML = `
+                //         <td><input type="text" class="form-control" name="ip_address[]"></td>
+                //         <td><input type="text" class="form-control" name="port[]" value="${frontendPort.value}"></td>
+                //         <td>
+                //             <select class="form-control" name="datacenter[]">
+                //                 ${getDatacenterOptions()}
+                //             </select>
+                //         </td>
+                //         <td><input type="text" class="form-control" name="fqdn[]" disabled></td>
+                //         <td>
+                //             <div class="form-check form-switch">
+                //                 <input class="form-check-input" type="checkbox" name="admin_state[]" checked>
+                //             </div>
+                //         </td>
+                //         <td><button type="button" class="btn btn-danger btn-sm delete-row">X</button></td>
+                //     `;
+                // }
+    
+    
+                // addRowBtn.addEventListener('click', addNewRow);
+                
+                // backendTable.addEventListener('click', function(e) {
+                //     if (e.target.classList.contains('delete-row')) {
+                //         e.target.closest('tr').remove();
+                //     }
+                // });
+    
+                // frontendDatacenter.addEventListener('change', function() {
+                // const backendDatacenters = backendTable.querySelectorAll('select[name="datacenter[]"]');
+                // backendDatacenters.forEach(select => {
+                //     select.innerHTML = getDatacenterOptions();
+                //     });
+                // });
+    
+                // frontendPort.addEventListener('change', function() {
+                // const backendPorts = backendTable.querySelectorAll('input[name="port[]"]');
+                // backendPorts.forEach(input => {
+                //     input.value = frontendPort.value;
+                //     });
+                // });
+    
+                // // Add initial row
+                // addNewRow();
+
+                // Function to update form indices
+                function updateFormIndices() {
+                    const rows = backendTable.getElementsByClassName('backend-row');
+                    formCount.value = rows.length;
+                    console.log(formCount.value)
+                    
+                    Array.from(rows).forEach((row, index) => {
+                        row.querySelectorAll('input, select').forEach(input => {
+                            input.name = input.name.replace(/form-\d+/, `form-${index}`);
+                            input.id = input.id.replace(/form-\d+/, `form-${index}`);
+                        });
+                    });
+                }
+
+                // Function to create new row
+                function createNewRow() {
+                    const lastRow = backendTable.querySelector('.backend-row:last-child');
+                    if (lastRow) {
+                        const newRow = lastRow.cloneNode(true);
+                        // Clear input values
+                        newRow.querySelectorAll('input[type="text"], input[type="number"]').forEach(input => {
+                            input.value = '';
+                        });
+                        // Reset select elements to first option
+                        newRow.querySelectorAll('select').forEach(select => {
+                            select.selectedIndex = 0;
+                        });
+                        
+                        lastRow.parentNode.appendChild(newRow);
+                        updateFormIndices();
+                        
+                        // Add event listener to new remove button
+                        newRow.querySelector('.remove-row').addEventListener('click', function() {
+                            this.closest('tr').remove();
+                            updateFormIndices();
+                        });
+                    }
+                }
+
+                // Add event listener to "Add Backend" button
+                addBackendBtn.addEventListener('click', createNewRow);
+
+                // Add event listeners to existing remove buttons
+                document.querySelectorAll('.remove-row').forEach(button => {
+                    button.addEventListener('click', function() {
+                        this.closest('tr').remove();
+                        updateFormIndices();
+                    });
+                });
+
+                // Form submission handler
+                const form = document.querySelector('form');
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // Create FormData object
+                    const formData = new FormData(form);
+                    
+                    // Send form data using fetch
+                    fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Form submitted successfully!');
+                        } else {
+                            alert('Error submitting form: ' + data.errors);
+                        }
+                    })
+                    // .catch(error => {
+                    //     console.error('Error:', error);
+                    //     alert('Error submitting form');
+                    // });
+                });
+
+            });
+    
+        </script>
+</form>
+{% endblock page_content %}

@@ -1,0 +1,24 @@
+<!-- pages/templates/pages/home.html -->
+
+{% extends "base.html" %}
+
+{% block page_content %}
+    <h1>VIP List</h1>
+
+    <div class="row">
+        {% for vip in vip_list %}
+            <div class="col-sm-3">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h7 class="card-title">
+                            <a href=" {{ vip.frontend_handle }} ">{{ vip.frontend_handle }}</a>
+                        </h7>
+                        <p class="card-text">VIP: {{ vip.listener_address }}</p>
+                        <p class="card-text">Port: {{ vip.protocol }} / {{ vip.port }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock page_content %}

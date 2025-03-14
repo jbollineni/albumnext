@@ -1,0 +1,239 @@
+from device_inventory.models import DeviceInfo
+from slb_registry.models import FrontendInfo, BackendInfo, BackendMembers, HealthCheckInfo
+
+FrontendInfo.objects.all()
+
+device1 = DeviceInfo(device_fqdn="slbv301a-d.ashburn.va.ndcasbn.comcast.net", device_datacenter="ashburn", device_platform_vendor="f5", device_security_zone="green", cluster_primary_unit="slbv301a-d.ashburn.va.ndcasbn.comcast.net", object_db_status="active")
+device1.save()
+
+
+#####################################
+hm1 = HealthCheckInfo(healthcheck_handle="m_myfirsttest-as-1t_443_https", device_fqdn=device1, healthcheck_type="https", interval="10", timeout="5", receive_string="200", send_string="GET /health HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n", port="443", object_db_status="active") 
+hm1.save()
+
+
+hm2 = HealthCheckInfo(healthcheck_handle="m_myfirsttest-as-2t_443_https", device_fqdn=device1, healthcheck_type="https", interval="10", timeout="5", receive_string="200", send_string="GET /health HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n", port="443", object_db_status="active") 
+hm2.save()
+
+#####################################
+
+pool1 = BackendInfo(backend_handle="p_myfirsttest-as-1t_443", device_fqdn=device1,  load_balancing_mode="round-robin", healthcheck_handle=hm1, object_db_status="active")
+pool1.save()
+
+pool2 = BackendInfo(backend_handle="p_myfirsttest-as-2t_443", device_fqdn=device1,  load_balancing_mode="round-robin", healthcheck_handle=hm2, object_db_status="active")
+pool2.save()
+
+#####################################
+vip1 = FrontendInfo( frontend_handle="vs_myfirsttest-as-1t_443", listener_address="192.168.1.11", port="443", address_type="ipv4", protocol = "tcp", connection_type="full_proxy", admin_state="enabled", device_fqdn=device1, app_inventory_id="123",  app_inventory_slug="convoy", team_distro="a@b.com", object_db_status="active", backend_handle=pool1)
+vip1.save()
+
+vip2 = FrontendInfo(frontend_handle="vs_myfirsttest-as-2t_443", listener_address="192.168.1.12", port="443", address_type="ipv4", protocol = "tcp", connection_type="full_proxy", admin_state="enabled", device_fqdn=device1, app_inventory_id="123",  app_inventory_slug="convoy", team_distro="a@b.com", object_db_status="active", backend_handle=pool2)
+vip2.save()
+
+
+vip2 = FrontendInfo(handle="vs_myfirsttest-as-2t_443", address="192.168.1.12", port="443", protocol = "tcp", pool_name="p_myfirsttest-as-1t_443", devhub_app_name="convoy")
+vip3 = FrontendInfo(handle="vs_myfirsttest-as-3t_443", address="192.168.1.13", port="443", protocol = "tcp", pool_name="p_myfirsttest-as-1t_443", devhub_app_name="convoy")
+vip4 = FrontendInfo(handle="vs_myfirsttest-as-4t_443", address="192.168.1.14", port="443", protocol = "tcp", pool_name="p_myfirsttest-as-1t_443", devhub_app_name="convoy")
+vip5 = FrontendInfo(handle="vs_myfirsttest-as-1t_443", address="192.168.1.10", port="443", protocol = "tcp", pool_name="p_myfirsttest-as-1t_443", devhub_app_name="convoy")
+vip6 = FrontendInfo(handle="vs_myfirsttest-as-2t_443", address="192.168.1.12", port="443", protocol = "tcp", pool_name="p_myfirsttest-as-1t_443", devhub_app_name="convoy")
+vip6 = FrontendInfo(handle="vs_myfirsttest-as-3t_443", address="192.168.1.13", port="443", protocol = "tcp", pool_name="p_myfirsttest-as-1t_443", devhub_app_name="convoy")
+vip7 = FrontendInfo(handle="vs_myfirsttest-as-4t_443", address="192.168.1.14", port="443", protocol = "tcp", pool_name="p_myfirsttest-as-1t_443", devhub_app_name="convoy")
+vip8 = FrontendInfo(handle="vs_myfirsttest-as-1t_443", address="192.168.1.10", port="443", protocol = "tcp", pool_name="p_myfirsttest-as-1t_443", devhub_app_name="convoy")
+vip9 = FrontendInfo(handle="vs_myfirsttest-as-2t_443", address="192.168.1.12", port="443", protocol = "tcp", pool_name="p_myfirsttest-as-1t_443", devhub_app_name="convoy")
+vip10 = FrontendInfo(handle="vs_myfirsttest-as-3t_443", address="192.168.1.13", port="443", protocol = "tcp", pool_name="p_myfirsttest-as-1t_443", devhub_app_name="convoy")
+vip11 = FrontendInfo(handle="vs_myfirsttest-as-4t_443", address="192.168.1.14", port="443", protocol = "tcp", pool_name="p_myfirsttest-as-1t_443", devhub_app_name="convoy")
+
+
+#####################################
+
+
+device1 = DeviceInfo(device_fqdn="slbv301a-d.ashburn.va.ndcasbn.comcast.net", device_datacenter="ashburn", device_platform_vendor="f5", device_security_zone="green", cluster_primary_unit="slbv301a-d.ashburn.va.ndcasbn.comcast.net", object_db_status="active")
+device1.save()
+
+device2 = DeviceInfo(device_fqdn="slbv301a-d.northlake.il.ndcchgo.comcast.net", device_datacenter="chicago", device_platform_vendor="f5", device_security_zone="green", cluster_primary_unit="slbv301a-d.northlake.il.ndcchgo.comcast.net", object_db_status="active")
+device2.save()
+
+device3 = DeviceInfo(device_fqdn="slbv301a-d.hillsboro.or.ndchlsbr.comcast.net", device_datacenter="hillsboro", device_platform_vendor="f5", device_security_zone="green", cluster_primary_unit="slbv301a-d.hillsboro.or.ndchlsbr.comcast.net", object_db_status="active")
+device3.save()
+
+for i in range(1, 11):
+    hm = HealthCheckInfo(healthcheck_handle=f"m_test-as-{i}t_443_https", device_fqdn=device1, healthcheck_type="https", interval="10", timeout="5", receive_string="200", send_string="GET /health HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n", healthcheck_port="443", object_db_status="active") 
+    hm.save()
+    pool = BackendInfo(backend_handle=f"p_test-as-{i}t_443", device_fqdn=device1,  load_balancing_mode="round-robin", healthcheck_handle=hm, object_db_status="active")
+    pool.save()
+    vip = FrontendInfo(frontend_handle=f"vs_test-as-{i}t_443", listener_address=f"192.168.1.{i}", port="443", address_type="ipv4", protocol = "tcp", connection_type="full_proxy", admin_state="enabled", device_fqdn=device1, app_inventory_id="123",  app_inventory_slug="convoy", team_distro="a@b.com", object_db_status="active", backend_handle=pool)
+    vip.save()
+
+for i in range(11, 21):
+    hm = HealthCheckInfo(healthcheck_handle=f"m_test-as-{i}t_443_https", device_fqdn=device1, healthcheck_type="https", interval="10", timeout="5", receive_string="200", send_string="GET /health HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n", healthcheck_port="443", object_db_status="active") 
+    hm.save()
+    pool = BackendInfo(backend_handle=f"p_test-as-{i}t_443", device_fqdn=device1,  load_balancing_mode="round-robin", healthcheck_handle=hm, object_db_status="active")
+    pool.save()
+    vip = FrontendInfo(frontend_handle=f"vs_test-as-{i}t_443", listener_address=f"192.168.1.{i}", port="443", address_type="ipv4", protocol = "tcp", connection_type="full_proxy", admin_state="enabled", device_fqdn=device1, app_inventory_id="123",  app_inventory_slug="einstein", team_distro="a@b.com", object_db_status="active", backend_handle=pool)
+    vip.save()
+
+
+
+for i in range(21, 31):
+    hm = HealthCheckInfo(healthcheck_handle=f"m_test-ch2-{i}t_443_https", device_fqdn=device2, healthcheck_type="https", interval="10", timeout="5", receive_string="200", send_string="GET /health HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n", healthcheck_port="443", object_db_status="active") 
+    hm.save()
+    pool = BackendInfo(backend_handle=f"p_test-ch2-{i}t_443", device_fqdn=device2,  load_balancing_mode="round-robin", healthcheck_handle=hm, object_db_status="active")
+    pool.save()
+    vip = FrontendInfo(frontend_handle=f"vs_test-ch2-{i}t_443", listener_address=f"192.168.11.{i}", port="443", address_type="ipv4", protocol = "tcp", connection_type="full_proxy", admin_state="enabled", device_fqdn=device2, app_inventory_id="123",  app_inventory_slug="convoy", team_distro="a@b.com", object_db_status="active", backend_handle=pool)
+    vip.save()
+
+for i in range(31, 41):
+    hm = HealthCheckInfo(healthcheck_handle=f"m_test-ch2-{i}t_443_https", device_fqdn=device2, healthcheck_type="https", interval="10", timeout="5", receive_string="200", send_string="GET /health HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n", healthcheck_port="443", object_db_status="active") 
+    hm.save()
+    pool = BackendInfo(backend_handle=f"p_test-ch2-{i}t_443", device_fqdn=device2,  load_balancing_mode="round-robin", healthcheck_handle=hm, object_db_status="active")
+    pool.save()
+    vip = FrontendInfo(frontend_handle=f"vs_test-ch2-{i}t_443", listener_address=f"192.168.11.{i}", port="443", address_type="ipv4", protocol = "tcp", connection_type="full_proxy", admin_state="enabled", device_fqdn=device2, app_inventory_id="123",  app_inventory_slug="einstein", team_distro="a@b.com", object_db_status="active", backend_handle=pool)
+    vip.save()
+
+for i in range(41, 51):
+    hm = HealthCheckInfo(healthcheck_handle=f"m_test-ho-{i}t_443_https", device_fqdn=device3, healthcheck_type="https", interval="10", timeout="5", receive_string="200", send_string="GET /health HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n", healthcheck_port="443", object_db_status="active") 
+    hm.save()
+    pool = BackendInfo(backend_handle=f"p_test-ho-{i}t_443", device_fqdn=device3,  load_balancing_mode="round-robin", healthcheck_handle=hm, object_db_status="active")
+    pool.save()
+    vip = FrontendInfo(frontend_handle=f"vs_test-ho-{i}t_443", listener_address=f"192.168.13.{i}", port="443", address_type="ipv4", protocol = "tcp", connection_type="full_proxy", admin_state="enabled", device_fqdn=device3, app_inventory_id="123",  app_inventory_slug="convoy", team_distro="a@b.com", object_db_status="active", backend_handle=pool)
+    vip.save()
+
+for i in range(51, 61):
+    hm = HealthCheckInfo(healthcheck_handle=f"m_test-ho-{i}t_443_https", device_fqdn=device3, healthcheck_type="https", interval="10", timeout="5", receive_string="200", send_string="GET /health HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n", healthcheck_port="443", object_db_status="active") 
+    hm.save()
+    pool = BackendInfo(backend_handle=f"p_test-ho-{i}t_443", device_fqdn=device3,  load_balancing_mode="round-robin", healthcheck_handle=hm, object_db_status="active")
+    pool.save()
+    vip = FrontendInfo(frontend_handle=f"vs_test-ho-{i}t_443", listener_address=f"192.168.13.{i}", port="443", address_type="ipv4", protocol = "tcp", connection_type="full_proxy", admin_state="enabled", device_fqdn=device3, app_inventory_id="123",  app_inventory_slug="einstein", team_distro="a@b.com", object_db_status="active", backend_handle=pool)
+    vip.save()
+
+
+FrontendInfo.objects.all().values()
+
+FrontendInfo.objects.all().delete()
+
+
+from this table 
+
+>>> FrontendInfo.objects.all().values()
+<QuerySet [{'handle': 'vs_myfirsttest-as-26t_443', 'address': '192.168.1.26', 'address_type': '', 'port': 443, 'protocol': 'tcp', 'pool_name': 'p_myfirsttest-as-26t_443', 'connection_type': '', 'platform_name': '', 'datacenter': '', 'devhub_id': 0, 'devhub_app_slug': 'dce_-_loadbalancing', 'team_distro': '', 'admin_state': ''}, {'handle': 'vs_myfirsttest-as-27t_443', 'address': '192.168.1.27', 'address_type': '', 'port': 443, 'protocol': 'tcp', 'pool_name': 'p_myfirsttest-as-27t_443', 'connection_type': '', 'platform_name': '', 'datacenter': '', 'devhub_id': 0, 'devhub_app_slug': 'dce_-_loadbalancing', 'team_distro': '', 'admin_state': ''}, {'handle': 'vs_myfirsttest-as-28t_443', 'address': '192.168.1.28', 'address_type': '', 'port': 443, 'protocol': 'tcp', 'pool_name': 'p_myfirsttest-as-28t_443', 'connection_type': '', 'platform_name': '', 'datacenter': '', 'devhub_id': 0, 'devhub_app_slug': 'dce_-_loadbalancing', 'team_distro': '', 'admin_state': ''}, {'handle': 'vs_myfirsttest-as-29t_443', 'address': '192.168.1.29', 'address_type': '', 'port': 443, 'protocol': 'tcp', 'pool_name': 'p_myfirsttest-as-29t_443', 'connection_type': '', 'platform_name': '', 'datacenter': '', 'devhub_id': 0, 'devhub_app_slug': 'dce_-_loadbalancing', 'team_distro': '', 'admin_state': ''}, {'handle': 'vs_myfirsttest-as-30t_443', 'address': '192.168.1.30', 'address_type': '', 'port': 443, 'protocol': 'tcp', 'pool_name': 'p_myfirsttest-as-30t_443', 'connection_type': '', 'platform_name': '', 'datacenter': '', 'devhub_id': 0, 'devhub_app_slug': 'dce_-_loadbalancing', 'team_distro': '', 'admin_state': ''}, {'handle': 'vs_myfirsttest-as-31t_443', 'address': '192.168.1.31', 'address_type': '', 'port': 443, 'protocol': 'tcp', 'pool_name': 'p_myfirsttest-as-31t_443', 'connection_type': '', 'platform_name': '', 'datacenter': '', 'devhub_id': 0, 'devhub_app_slug': 'dce_-_loadbalancing', 'team_distro': '', 'admin_state': ''}, {'handle': 'vs_myfirsttest-as-32t_443', 'address': '192.168.1.32', 'address_type': '', 'port': 443, 'protocol': 'tcp', 'pool_name': 'p_myfirsttest-as-32t_443', 'connection_type': '', 'platform_name': '', 'datacenter': '', 'devhub_id': 0, 'devhub_app_slug': 'dce_-_loadbalancing', 'team_distro': '', 'admin_state': ''}, {'handle': 'vs_myfirsttest-as-33t_443', 'address': '192.168.1.33', 'address_type': '', 'port': 443, 'protocol': 'tcp', 'pool_name': 'p_myfirsttest-as-33t_443', 'connection_type': '', 'platform_name': '', 'datacenter': '', 'devhub_id': 0, 'devhub_app_slug': 'dce_-_loadbalancing', 'team_distro': '', 'admin_state': ''}, {'handle': 'vs_myfirsttest-as-34t_443', 'address': '192.168.1.34', 'address_type': '', 'port': 443, 'protocol': 'tcp', 'pool_name': 'p_myfirsttest-as-34t_443', 'connection_type': '', 'platform_name': '', 'datacenter': '', 'devhub_id': 0, 'devhub_app_slug': 'dce_-_loadbalancing', 'team_distro': '', 'admin_state': ''}, {'handle': 'vs_myfirsttest-as-35t_443', 'address': '192.168.1.35', 'address_type': '', 'port': 443, 'protocol': 'tcp', 'pool_name': 'p_myfirsttest-as-35t_443', 'connection_type': '', 'platform_name': '', 'datacenter': '', 'devhub_id': 0, 'devhub_app_slug': 'dce_-_loadbalancing', 'team_distro': '', 'admin_state': ''}, {'handle': 'vs_myfirsttest-as-36t_443', 'address': '192.168.1.36', 'address_type': '', 'port': 443, 'protocol': 'tcp', 'pool_name': 'p_myfirsttest-as-36t_443', 'connection_type': '', 'platform_name': '', 'datacenter': '', 'devhub_id': 0, 'devhub_app_slug': 'dce_-_loadbalancing', 'team_distro': '', 'admin_state': ''}, {'handle': 'vs_myfirsttest-as-1t_443', 'address': '192.168.1.1', 'address_type': '', 'port': 443, 'protocol': 'tcp', 'pool_name': 'p_myfirsttest-as-1t_443', 'connection_type': '', 'platform_name': '', 'datacenter': '', 'devhub_id': 0, 'devhub_app_slug': 'convoy', 'team_distro': '', 'admin_state': ''}, {'handle': 'vs_myfirsttest-as-2t_443', 'address': '192.168.1.2', 'address_type': '', 'port': 443, 'protocol': 'tcp', 'pool_name': 'p_myfirsttest-as-2t_443', 'connection_type': '', 'platform_name': '', 'datacenter': '', 'devhub_id': 0, 'devhub_app_slug': 'convoy', 'team_distro': '', 'admin_state': ''}, {'handle': 'vs_myfirsttest-as-3t_443', 'address': '192.168.1.3', 'address_type': '', 'port': 443, 'protocol': 'tcp', 'pool_name': 'p_myfirsttest-as-3t_443', 'connection_type': '', 'platform_name': '', 'datacenter': '', 'devhub_id': 0, 'devhub_app_slug': 'convoy', 'team_distro': '', 'admin_state': ''}, {'handle': 'vs_myfirsttest-as-4t_443', 'address': '192.168.1.4', 'address_type': '', 'port': 443, 'protocol': 'tcp', 'pool_name': 'p_myfirsttest-as-4t_443', 'connection_type': '', 'platform_name': '', 'datacenter': '', 'devhub_id': 0, 'devhub_app_slug': 'convoy', 'team_distro': '', 'admin_state': ''}, {'handle': 'vs_myfirsttest-as-5t_443', 'address': '192.168.1.5', 'address_type': '', 'port': 443, 'protocol': 'tcp', 'pool_name': 'p_myfirsttest-as-5t_443', 'connection_type': '', 'platform_name': '', 'datacenter': '', 'devhub_id': 0, 'devhub_app_slug': 'convoy', 'team_distro': '', 'admin_state': ''}, {'handle': 'vs_myfirsttest-as-6t_443', 'address': '192.168.1.6', 'address_type': '', 'port': 443, 'protocol': 'tcp', 'pool_name': 'p_myfirsttest-as-6t_443', 'connection_type': '', 'platform_name': '', 'datacenter': '', 'devhub_id': 0, 'devhub_app_slug': 'convoy', 'team_distro': '', 'admin_state': ''}, {'handle': 'vs_myfirsttest-as-7t_443', 'address': '192.168.1.7', 'address_type': '', 'port': 443, 'protocol': 'tcp', 'pool_name': 'p_myfirsttest-as-7t_443', 'connection_type': '', 'platform_name': '', 'datacenter': '', 'devhub_id': 0, 'devhub_app_slug': 'convoy', 'team_distro': '', 'admin_state': ''}, {'handle': 'vs_myfirsttest-as-8t_443', 'address': '192.168.1.8', 'address_type': '', 'port': 443, 'protocol': 'tcp', 'pool_name': 'p_myfirsttest-as-8t_443', 'connection_type': '', 'platform_name': '', 'datacenter': '', 'devhub_id': 0, 'devhub_app_slug': 'convoy', 'team_distro': '', 'admin_state': ''}, {'handle': 'vs_myfirsttest-as-9t_443', 'address': '192.168.1.9', 'address_type': '', 'port': 443, 'protocol': 'tcp', 'pool_name': 'p_myfirsttest-as-9t_443', 'connection_type': '', 'platform_name': '', 'datacenter': '', 'devhub_id': 0, 'devhub_app_slug': 'convoy', 'team_distro': '', 'admin_state': ''}, '...(remaining elements truncated)...']>
+>>>
+
+provide a django class based code for views.py and template to paginate the vip list page which displays only the vip handle and vip address with clickable link to the vip handle.
+
+>>> FrontendInfo.objects.filter(handle="vs_myfirsttest-as-2t_443").values()
+<QuerySet [{'handle': 'vs_myfirsttest-as-2t_443', 'address': '192.168.1.2', 'address_type': '', 'port': 443, 'protocol': 'tcp', 'pool_name': 'p_myfirsttest-as-2t_443', 'connection_type': '', 'platform_name': '', 'datacenter': '', 'devhub_id': 0, 'devhub_app_slug': 'convoy', 'team_distro': '', 'admin_state': ''}]>
+
+
+
+new_pool = Pool.objects.create(name="Web Servers", description="Pool for main web servers")
+
+pool1=PoolMember.objects.create(pool="p_test-as-1t_443", ip_address="192.168.1.10", port=80)
+PoolMember.objects.create(pool="p_test-as-1t_443", ip_address="192.168.1.11", port=80, weight=2)
+
+
+pool=BackendInfo(name="p_test-as-1t_443", load_balancing_mode="round-robin", health_monitor="m_test-as-1t_443")
+
+
+
+    <h1>VIP List</h1>
+
+    <div class="row">
+        {% for vip in vip_list %}
+            <div class="col-sm-3">
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <h7 class="card-title">
+                            <a href=" {{ vip.handle }} ">{{ vip.handle }}</a>
+                        </h7>
+                        <p class="card-text">VIP: {{ vip.address }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+
+
+
+<!-- templates/slb_vip_list.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SLB VIP List</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .pagination a {
+            color: black;
+            float: left;
+            padding: 8px 16px;
+            text-decoration: none;
+            transition: background-color .3s;
+            border: 1px solid #ddd;
+            margin: 0 4px;
+        }
+        .pagination a.active {
+            background-color: #4CAF50;
+            color: white;
+            border: 1px solid #4CAF50;
+        }
+        .pagination a:hover:not(.active) {background-color: #ddd;}
+    </style>
+</head>
+<body>
+    <h1>SLB VIP List</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Handle</th>
+                <th>Address</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for vip in vips %}
+            <tr>
+                <td><a href="{% url 'slb_vip_detail' handle=vip.handle %}">{{ vip.handle }}</a></td>
+                <td>{{ vip.address }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+</body>
+</html>
+
+
